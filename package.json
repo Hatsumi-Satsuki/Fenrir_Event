@@ -1,0 +1,31 @@
+{
+  "name": "creation-association-event-bot",
+  "version": "2.0.0",
+  "description": "Fenrir_Event_Bot",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.4.0",
+    "node-cron": "^3.0.0",
+    "query-string": "^7.0.1",
+    "keyv": "^4.1.1",
+    "@keyv/sqlite": "^3.0.0",
+    "level": "^8.0.0",
+    "@discordjs/voice": "^0.16.0",
+    "ffmpeg-static": "^5.2.0"
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/creation-association-event-bot"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "template"
+  ]
+}

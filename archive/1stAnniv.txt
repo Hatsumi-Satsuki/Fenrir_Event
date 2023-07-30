@@ -1,0 +1,1625 @@
+
+/*/
+
+コマンド
+
+/*/
+
+/*/
+
+会話機能オンオフ切り替え
+
+/*/
+const greeting_setting = new Keyv("sqlite://db.sqlite", {
+  table: "greeting_setting",
+});
+
+client.on("messageCreate", async (message) => {
+  if (message.channel == client.channels.cache.get("970237568945913886")) {
+    if (message.author.bot) {
+      return;
+    }
+    const splitmessage = message.content.split(" ");
+    if (splitmessage[0] === "!talk") {
+      if (splitmessage[1] === "off") {
+        message.channel.send("……またいずれ会おう");
+        await greeting_setting.set("status", "off");
+      }
+
+      if (splitmessage[1] === "on") {
+        message.channel.send("……出番か");
+        await greeting_setting.set("status", "on");
+      }
+
+      const greeting_setting_status = await greeting_setting.get("status");
+      message.channel.send("greeting = " + greeting_setting_status);
+    }
+  }
+});
+
+/*/
+
+イベント制御室
+
+/*/
+const event_room = new Keyv("sqlite://db.sqlite", { table: "event_room" });
+
+client.on("messageCreate", async (message) => {
+  if (message.channel == client.channels.cache.get("970237568945913886")) {
+    if (message.author.bot) {
+      return;
+    }
+    const splitmessage = message.content.split(" ");
+    if (splitmessage[0] === "!set") message.channel.send("照準…完了。");
+    await event_room.set("channel", splitmessage[1]);
+    const event_room_channel = await event_room.get("channel");
+    console.log(event_room_channel);
+  }
+});
+
+//通信室へ転送
+client.on("messageCreate", async (message) => {
+  const event_room_channel = await event_room.get("channel");
+  if (message.channel == client.channels.cache.get(`${event_room_channel}`)) {
+    if (message.author.bot) {
+      return;
+    }
+    const words = message.content;
+    const user = message.author.username;
+    client.channels.cache
+      .get(`970237714869944340`)
+      .send(`\`${user}\`\n${words}`);
+  }
+});
+
+//通信室から転送
+client.on("messageCreate", async (message) => {
+  if (message.channel == client.channels.cache.get("970237714869944340")) {
+    if (message.author.bot) {
+      return;
+    }
+    const words = message.content;
+    const event_room_channel = await event_room.get("channel");
+
+    // client.channels.cache.get(`${event_room_channel}`).send(`${words}`);
+
+    //Webhookの取得（なければ作成する）
+    const webhook = await getWebhookInChannel(
+      client.channels.cache.get(event_room_channel)
+    );
+    //メッセージ送信（今回は受け取ったものをそのまま送信）
+    //usernameとavatarURLをメッセージ発信者のものに指定するのがミソ
+    const webhookmessage = await webhook
+      .send({
+        content: words,
+        username: "‡?̵͍͇͑͐͒͜¿̸͚͔̻͋͐͛?̴̻̺̙͑͆̽?̵͕͚̟̿̕͝?̸͕̙̻̓́̿‡",
+        avatarURL:
+          "https://cdn.glitch.global/f07fb903-52cb-4077-b26c-f478bb1a6af1/fallen-icon.png?v=1651489749473",
+      })
+      .catch((e) => console.error(e));
+  }
+});
+
+event_room.on("error", (err) => console.error("Keyv connection error:", err));
+
+//カウントダウン
+
+client.on("messageCreate", async (message) => {
+  if (message.channel == client.channels.cache.get("970237568945913886")) {
+    if (message.author.bot) {
+      return;
+    }
+    const splitmessage = message.content.split(" ");
+    if (splitmessage[0] === "!countdown") {
+      const count = +splitmessage[1];
+      client.channels.cache.get("997749272650989688").send("𒀏𒀐𒀑𒀒𒀓𒀔");
+      const countMessage = await client.channels.cache
+        .get("997749272650989688")
+        .send("𒀟COUNTDOWN𒀠");
+      client.channels.cache.get("997749272650989688").send("𒀧𒀨𒀪𒀫𒀬𒀭");
+
+      function countDownFunc(waitSec, callbackFunc) {
+        var spanedSec = 0;
+        var id = setInterval(function () {
+          spanedSec++;
+          countMessage.edit(`𒀟𒀠 **${String(waitSec - spanedSec)}** 𒀟𒀠`);
+          if (spanedSec >= waitSec) {
+            clearInterval(id);
+            if (callbackFunc) callbackFunc();
+          }
+        }, 1000);
+      }
+      
+      countDownFunc(count, function () {
+
+act("_ _",nullN,nullI,350)
+        var T=T+350
+            
+        act("_ _\n_ _\n_ _",nullN,nullI,T+350)
+            var T= T+350
+        act("_ _\n_ _\n_ _",nullN,nullI,T+350)
+               var T= T+350
+        act("_ _\n_ _\n_ _",nullN,nullI,T+350)
+               var T= T+350
+        act("_ _\n_ _\n_ _",nullN,nullI,T+350)
+               var T= T+350
+   act("_ _\n_ _\n_ _",nullN,nullI,T+350)
+               var T= T+350
+          
+                  file('https://cdn.discordapp.com/attachments/982797122996928602/994835463103840331/countdown.gif',T)
+        var T=2100
+        file("https://media.discordapp.net/attachments/848927982260584498/997692534337839215/IMG_0686.jpg",T+12000)
+               var T= T+12000
+      });
+
+      /*/
+     
+      
+do {
+  
+  count += 1
+  console.log(count);
+await  setTimeout(()=>{},1000);
+} while (count < 0);
+      
+  let count=splitmessage[1].int
+  while(count>0)
+        
+      console.log(count)
+    /*/
+    }
+  }
+});
+
+
+
+
+
+/*/
+
+創作連盟1周年記念シナリオ
+
+/*/
+
+
+
+//登場人物
+const bugN = "‡?̵͍͇͑͐͒͜¿̸͚͔̻͋͐͛?̴̻̺̙͑͆̽?̵͕͚̟̿̕͝?̸͕̙̻̓́̿‡";
+const bugI =
+  "https://cdn.glitch.global/f07fb903-52cb-4077-b26c-f478bb1a6af1/fallen-icon.png?v=1651489749473";
+const fenaln = "──";
+const fenali =
+  "https://cdn.glitch.global/f07fb903-52cb-4077-b26c-f478bb1a6af1/fenrir_alter.png?v=1651539536073";
+const fenN = "ふぇんりる";
+const fenI =
+  "https://cdn.glitch.global/d1d7937c-419c-4c76-890d-d0c38b3d8a19/fenrir_icon.jpeg?v=1644842442537";
+const tyrN = "テュール";
+const tyrI ="https://cdn.glitch.global/f07fb903-52cb-4077-b26c-f478bb1a6af1/tyr.png?v=1655121707879"
+const armorI ="https://cdn.glitch.global/f07fb903-52cb-4077-b26c-f478bb1a6af1/armor.png?v=1655302029357"
+const armorN ="鎧兵"
+const nullN="."
+const nullI="https://cdn.glitch.global/f07fb903-52cb-4077-b26c-f478bb1a6af1/nullIcon.png?v=1655365491689"
+
+const ordN="オーディン"
+const ordI="https://cdn.glitch.global/f07fb903-52cb-4077-b26c-f478bb1a6af1/odin.jpeg?v=1651578361916"
+
+const phxN = "ふぇにくす"
+const phxI = "https://media.discordapp.net/attachments/982797122996928602/994756253538590760/63_20200824204856.png"
+
+
+const mark =
+  "https://media.discordapp.net/attachments/970237992415399956/994758238723653732/243.png";
+
+const chat = "970635600954793994";
+const stage ="997749272650989688"
+//分岐
+
+/*/
+client.on("messageCreate", ,"https://cdn.glitch.global/f07fb903-52cb-4077-b26c-f478bb1a6af1/fallen-icon.png?v=1651489749473"`async message => {
+  if (message.channel == client.channels.cache.get("970237568945913886")) {
+    if (message.author.bot) {
+      return;
+    };
+    const splitmessage = message.content.split(" ");
+    if (splitmessage[0] === "!vote") {
+      
+      if(splitmessage[1]==="1"){
+        await Vote.set("1th 1","1")}
+      
+              if(splitmessage[1]==="2"){
+        await Vote.set("1th 1","2")}
+      
+      console.log(Vote.get("1th"))
+      }}});
+/*/
+
+//通常進行素体
+
+client.on("messageCreate", async (message) => {
+  if (message.channel == client.channels.cache.get("970237568945913886")) {
+    if (message.author.bot) {
+      return;
+    }
+    const splitmessage = message.content.split(" ");
+    if (splitmessage[0] === "!once") {
+      
+    
+        
+       
+      if (splitmessage[1] === "1") {
+        message.channel.send("進行1");
+
+        await act(
+          "──私は、世界に災いをもたらすという予言を受けて、忌み子として生まれた。",
+          fenaln,
+          fenali,
+          3000
+        );
+        var T = 3000;
+        await act("_ _\n_ _", nullN, nullI, T + 6000);
+        var T = T + 6000;
+        await act("_ _\n_ _", nullN, nullI, T + 1000);
+        var T = T + 1000;
+        await act("_ _\n_ _", nullN, nullI, T + 1000);
+        var T = T + 1000;
+        await act(
+          "──身に覚えのない畏怖。身に覚えのあるはずもない未̀来̀の̀罪̀。子供のしつけに使われるような、悪役の代名詞。",
+          fenaln,
+          fenali,
+          T + 3000
+        );
+        var T = T + 3000;
+        await act("_ _\n_ _", nullN, nullI, T + 6000);
+        var T = T + 6000;
+        await act("_ _\n_ _", nullN, nullI, T + 1000);
+        var T = T + 1000;
+        await act("_ _\n_ _", nullN, nullI, T + 1000);
+        var T = T + 1000;
+        await act(
+          "https://media.discordapp.net/attachments/982797122996928602/994747874581684224/247_20220708083205.png",
+          fenaln,
+          fenali,
+          T + 3000
+        );
+        var T = T + 3000;
+        await act("_ _\n_ _", nullN, nullI, T + 6000);
+        var T = T + 6000;
+        await act("_ _\n_ _", nullN, nullI, T + 1000);
+        var T = T + 1000;
+        await act("_ _\n_ _", nullN, nullI, T + 1000);
+        var T = T + 1000;
+        await act(mark, nullN, nullI, T + 3000);
+        var T = T + 3000;
+        await act("_ _\n_ _", nullN, nullI, T + 6000);
+        var T = T + 6000;
+        await act("_ _\n_ _", nullN, nullI, T + 1000);
+        var T = T + 1000;
+        await act("_ _\n_ _", nullN, nullI, T + 1000);
+        var T = T + 1000;
+
+        await setTimeout(() => {
+          message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 2\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+      }
+    
+
+    if (splitmessage[1] === "2") {
+      message.channel.send("進行2");
+      var T = 0;
+      await act(
+        "──どれだけの月日を、こうして拘束されていただろうか。",
+        fenaln,
+        fenali,
+        3000
+      );
+      var T = 3000;
+      await act("_ _\n_ _", nullN, nullI, T + 6000);
+      var T = T + 6000;
+      await act(
+        '私を縛るこの拘束具も、仮にも"魔法の紐"。',
+        fenaln,
+        fenali,
+        6000
+      );
+      var T = 6000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act(
+        "少しずつ、少しずつ紐の魔法を剥ぎ取って、噛みちぎれるほどに弱めるのにも時間がかかってしまった。",
+        fenaln,
+        fenali,
+        T + 4000
+      );
+      var T = T + 4000;
+      await act("_ _\n_ _", nullN, nullI, T + 3000);
+      var T = T + 3000;
+      await act("ぁぐ……っ！……っ！", fenN, fenI, T + 4500);
+      var T = T + 4500;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act(
+        "_ _\n《参加型：拘束具を噛みちぎるふぇんりるを応援しよう！》\n<#970635600954793994>\n_ _",
+        fenN,
+        fenI,
+        T + 8000
+      );
+      var T = T + 8000;
+      await setTimeout(() => {
+        textMessage(
+          "《参加型：拘束具を噛みちぎるふぇんりるを応援しよう！》",
+          chat
+        );
+      }, T);
+      await setTimeout(() => {
+        message.channel.send(
+          "<:z_line:920665438306828319><:z_line:920665438306828319>\nYes：!once 3\nNo：!once 5\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+        );
+      }, T);
+    }
+
+    if (splitmessage[1] === "3") {
+      message.channel.send("進行3");
+
+      var T = 0;
+      await act("く……はぁ……っ！はぁ……", fenN, fenI, T + 3000);
+      var T = T + 3000;
+      await act("やっと……外れましたね……", fenN, fenI, T + 8000);
+      var T = T + 8000;
+      await act("_ _\n_ _", nullN, nullI, T + 2000);
+      var T = T + 2000;
+      await act("外に……出ないと", fenN, fenI, T + 4000);
+      var T = T + 4000;
+
+      await act("_ _\n_ _", nullN, nullI, T + 2000);
+      var T = T + 2000;
+      await act("_ _\n_ _", nullN, nullI, T + 2000);
+      var T = T + 2000;
+      await act(
+        "ジメジメとした洞窟の壁を伝って、陽の光を求める。",
+        fenaln,
+        fenali,
+        T + 3000
+      );
+      var T = T + 3000;
+      await act("_ _\n_ _", nullN, nullI, T + 2000);
+      var T = T + 2000;
+      await act("_ _\n_ _", nullN, nullI, T + 2000);
+      var T = T + 2000;
+
+      await act(
+        "……はぁ…はぁ……歩くのがこんなに大変だなんて……",
+        fenN,
+        fenI,
+        T + 3000
+      );
+      var T = T + 3000;
+      await act("_ _\n_ _", nullN, nullI, T + 2000);
+      var T = T + 2000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      file("https://cdn.discordapp.com/attachments/982797122996928602/997012595561222294/unknown.png",T+8000)
+     var T = T + 8000;
+      await act("——まぶし……っ！", fenN, fenI, T + 4000);
+      var T = T + 4000;
+      await act("_ _\n_ _", nullN, nullI, T + 2000);
+      var T = T + 2000;
+      await act(
+        "目を閉じて俯き、瞳が光に慣れるのを待つ。",
+        fenaln,
+        fenali,
+        T + 4000
+      );
+      var T = T + 4000;
+      await act("_ _\n_ _", nullN, nullI, T + 3000);
+      var T = T + 3000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act("……っ！？", fenN, fenI, T + 4000);
+      var T = T + 4000;
+      await act("──", tyrN, tyrI, T + 4000);
+      var T = T + 4000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act("……テュール。", fenN, fenI, T + 5000);
+      var T = T + 5000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act(
+        "_ _\n過去の私の給̀餌̀係にして、私の拘束を成功させた立役者。",
+        fenaln,
+        fenali,
+        T + 5000
+      );
+      var T = T + 5000;
+      await act("_ _\n_ _", nullN, nullI, T + 2500);
+
+      var T = T + 2500;
+      await act(
+        "——やぁやぁ、思ったより早いご登場ですね、ふぇんりる？",
+        tyrN,
+        tyrI,
+        T + 4500
+      );
+      var T = T + 4500;
+      await act(
+        "これはともすると、外̀部̀か̀ら̀の̀干̀渉̀があったのかも……と",
+        tyrN,
+        tyrI,
+        T + 3000
+      );
+      var T = T + 3000;
+      await act("_ _\n_ _", nullN, nullI, T + 2000);
+      var T = T + 3000;
+            await act("\"外部\"……？", fenN, fenI, T + 3000);
+      var T = T + 3000;
+      await act("……相変わらず訳の分からないことを", fenN, fenI, T + 4000);
+      var T = T + 4000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 3000;
+        await act(
+        "……",
+        tyrN,
+        tyrI,
+        T + 4000
+      );
+      var T = T + 4000;
+      await act(
+        "ええ、そうですとも。——君は理解しなくていい。ワタシの事なんて。",
+        tyrN,
+        tyrI,
+        T + 3000
+      );
+      var T = T + 3000;
+      await act(
+        "いつの事か、魔法の紐で君を縛り上げたその時に、覚悟は済ませているとも。",
+        tyrN,
+        tyrI,
+        T + 5000
+      );
+      var T = T + 5000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act("はぁ……", fenN, fenI, T + 1000);
+      var T = T + 1000;
+      await act("要約すると、何です？", fenN, fenI, T + 1000);
+      var T = T + 1000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act("要約すると、そうですね……", tyrN, tyrI, T + 2000);
+      var T = T + 2000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act("_ _\n_ _", nullN, nullI, T + 1000);
+      var T = T + 1000;
+      await act("——ワタシは、君の敵だ。", tyrN, tyrI, T + 5000);
+      var T = T + 5000;
+      bookmark(T+8000)
+      await setTimeout(() => {
+          textMessage("《ふぇんりるの戦闘が始まった！何か手助けはできないだろうか……》\n<#970635600954793994>",stage)
+    }, T);
+await        setTimeout(() => {    textMessage("《ふぇんりるの戦闘が始まった！何か手助けはできないだろうか……》",chat)
+        }, T);
+                       
+           await setTimeout(() => {
+          message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 4\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+    };
+    
+    
+    
+    
+    
+    
+    if (splitmessage[1] === "4") {
+      message.channel.send("進行4");
+    var T=0
+    file("https://cdn.discordapp.com/attachments/982797122996928602/997016984485109770/2624118.jpg",T+3000)
+      var T=T+3000
+await  act("激戦の、さなかに。",fenaln,fenali,T+5000)
+var T = T+5000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("──ぁ",fenN,fenI,T+3000)
+var T = T+3000
+await  act("_ _\n_ _",nullN,nullI,T+1500)
+var T = T+1500
+await  act("すとんと、吸い込まれるように。あまりにも自然に、私の刃はテュールの胸を貫いた。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("_ _\n_ _",nullN,nullI,T+1500)
+var T = T+1500
+await  act("ぇ",fenN,fenI,T+1500)
+var T = T+1500
+         await  act("_ _\n_ _",nullN,nullI,T+2000)
+var T = T+2000
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("──憎んでくれても、構わないんですよ？",fenN,fenI,T+3000)
+var T = T+3000
+
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("最期まで、多くを語らずに。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("_ _\n_ _",nullN,nullI,T+500)
+var T = T+500
+await  act("_ _\n_ _",nullN,nullI,T+300)
+var T = T+300
+await  act("_ _\n_ _",nullN,nullI,T+300)
+var T = T+300
+await  act("_ _\n_ _",nullN,nullI,T+300)
+var T = T+300
+await  act("──育ての親は、死んだ。",fenaln,fenali,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+
+
+
+act(`\n_ _\n_ _`,bugN,bugI,T+5000)
+      var T =T+5000
+      act(`\n_ _\n_ _`,bugN,bugI,T+2000)
+      var T =T+2000
+       act(`\n_ _\n_ _`,bugN,bugI,T+2000)
+      var T =T+2000
+act("これが、君たちの選択の結果。\n_ _",bugN,bugI,T+5000)
+      var T =T+5000
+       act(`_ _\n_ _`,bugN,bugI,T+2000)
+      var T =T+2000
+     act("_ _\n別の道も、あったのにね。",bugN,bugI,T+3000)
+      var T =T+3000
+
+      bookmark(T+5000)
+     await setTimeout(() => {
+      message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 9\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+}
+
+    if (splitmessage[1] === "5") {
+    var  T=0
+      message.channel.send("進行5");
+
+//No
+
+await  act("外れ……ない……っ",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("──っ、──！",fenN,fenI,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("──",armorN,armorI,T+3000)
+var T = T+3000
+
+await  act("え……？",fenN,fenI,T+4000)
+var T = T+4000
+
+await  act("ガシャガシャと、遠方から慌ただしい金属音が響き渡る。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("拘束されてからこの方、人が訪れる事など無かったのに。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("暗く湿った空気の中、その音は段々と近く迫ってくる。",fenaln,fenali,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("そんな……",fenN,fenI,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("1寸先も見通せない暗闇の洞窟。それでも魔力に聡い者ならすぐさま拘束具の異変に気づくだろう。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("そうでなくとも、ランタンを持って近くに寄られてしまえばおしまいだ。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("そうなる前に紐を噛みちぎろうにも、時間が足りない。",fenaln,fenali,T+4000)
+var T = T+4000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("(ガシャン──！！)",armorN,armorI,T+3000)
+var T = T+3000
+await  act("っ……！",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("眼前の壁に、何か鎧のようなものが打ち付けられた。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("暗闇の中に人間の気配はなく、ただ鎧のような──中̀身̀の̀無̀い̀鎧̀が打ち付けられ、弾けて散る。",fenaln,fenali,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("──誰か、居るんですか",fenN,fenI,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("パッと、魔法の灯火が灯る。",fenaln,fenali,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",tyrN,tyrI,T+1000)
+var T = T+1000
+await  act("久しぶりですね。──ふぇんりる。",tyrN,tyrI,T+5000)
+var T = T+5000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("滑稽なほど紳士的な仕草で手を差し伸べて。",fenaln,fenali,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("さあ。ラグナロクを──始めましょう。",tyrN,tyrI,T+4000)
+var T = T+4000
+
+         await  act("_ _\n_ _\n_ _\n_ _",nullN,nullI,T+4000)
+var T = T+4000
+
+await  act("元給餌係──育̀て̀の̀親̀が、姿を現した。",fenaln,fenali,T+1000)
+var T = T+1000
+bookmark(T+5000)
+       await setTimeout(() => {
+      message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 6\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+}
+
+
+
+
+
+
+
+//生存 
+    if (splitmessage[1] === "6") {
+    var  T=0
+      message.channel.send("進行6");         await  act("_ _\n_ _",nullN,nullI,3000)
+var T = 3000
+
+await  act("飛び交う矢を払い、流し、斬り落とす。",fenaln,fenali,T+8000)
+var T = T+8000
+await  act("甲冑の軍勢は、テュールの操る魔法が絡めとる。",fenaln,fenali,T+5000)
+var T = T+35000
+await  act("大軍の最中に道を切り開いて一蓮托生、四面楚歌の中を走り抜ける。",fenaln,fenali,T+5000)
+var T = T+5000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("そうして一度、二度、三度、幾度の死線を越えて。",fenaln,fenali,T+5000)
+var T = T+5000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("ここまでです。──オーディン。",fenN,fenI,T+5000)
+var T = T+5000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("鋼鉄の玉座にもたれる、隻眼の少年。突きつけられた短剣と魔法を気にも留めず、詠うように言葉を紡ぐ。",fenaln,fenali,T+3000)
+var T = T+3000
+
+await  act("ここまで、ね。それはまあ、ボクのセリフだと思うけどね？",ordN,ordI,T+3000)
+var T = T+3000
+  await  act("_ _\n_ _",nullN,nullI,T+2000)
+var T = T+2000
+await  act("──世界を滅ぼす悪役は、君達の方なんだから。",ordN,ordI,T+5000)
+var T = T+5000   
+
+await  act("_ _\n_ _",nullN,nullI,T+2000)
+var T = T+2000
+await  act("──世界を滅ぼす悪役は、君達の方なんだから。",ordN,ordI,T+5000)
+var T = T+5000  
+await  act("_ _\n_ _\n_ _",nullN,nullI,T+5000)
+var T = T+5000
+ 
+
+
+bookmark(T+500)
+ await setTimeout(() => {
+      message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 7\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+    }
+    
+    
+    
+    
+
+    if (splitmessage[1] === "7") {
+    var  T=0
+      message.channel.send("進行7");      
+      await  act("_ _\n_ _",nullN,nullI,3000)
+    
+await  act("──か、は……っ",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("喉に溢れる血の味を振り払うように、咳を繰り返す。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("立ちあがろうとした体は、鉄鎖に縛られて動かない。",fenaln,fenali,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("……",tyrN,tyrI,T+3000)
+var T = T+3000
+await  act("鉄鎖を振り払い立ち上がったテュールを目の端に捉えて、動けないのは私だけ。",fenaln,fenali,T+3000)
+var T = T+3000
+
+await  act("──追撃をしないなんて……舐めているのでしょうかね？",tyrN,tyrI,T+3000)
+var T = T+3000
+
+await  act("──解呪か。 君の方こそ、相変わらず魔法だけは本当に上手だ。テュール。",ordN,ordI,T+3000)
+var T = T+3000
+
+await  act("貴方に褒められても、皮肉にしか聞こえませんね。──オーディン。",tyrN,tyrI,T+3000)
+var T = T+3000 
+await  act("_ _\n_ _",nullN,nullI,T+2000)
+var T = T+2000
+await  act("称賛は──貴方を斃した後、愛娘からたっぷり受け取りますとも──っ！",tyrN,tyrI,T+3000)
+var T = T+3000
+bookmark(T+3000)
+       await setTimeout(() => {
+      message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 8\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+};
+    
+    
+
+    if (splitmessage[1] === "8") {
+    var  T=0
+      message.channel.send("進行8");     
+      await  act("_ _\n_ _",nullN,nullI,3000)
+
+await  act("え……？",fenN,fenI,T+5000)
+var T = T+5000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+
+await  act("突如として生じた強烈な違和感。発生源を辿るように、視線をさまよわせる。",fenaln,fenali,T+2000)
+var T = T+2000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000  
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("_ _\n_ _",nullN,nullI,T+500)
+var T = T+500
+await  act("_ _\n_ _",nullN,nullI,T+500)
+var T = T+500
+
+await  act("──テュールの胸元に、短剣が突き刺さっていた。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("──ついさっきまで私が手にしていた、白い柄の短剣が。",fenaln,fenali,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("……悪趣味が…過ぎますよ",tyrN,tyrI,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("……",tyrN,tyrI,T+2000)
+var T = T+2000
+
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("呆気なく。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("あまりにも呆気なく。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("私のお̀と̀う̀さ̀ん̀は、死んだ。",fenaln,fenali,T+4000)
+var T = T+4000
+
+      
+await  act("_ _\n_ _",nullN,nullI,T+8000)  
+      await  act("_ _\n_ _",nullN,nullI,T+3000)  
+      await  act("_ _\n_ _",nullN,nullI,T+1000) 
+      await  act("_ _\n_ _",nullN,nullI,T+500) 
+      await  act("_ _\n_ _",nullN,nullI,T+300)    
+      await  act("_ _\n_ _",nullN,nullI,T+300)
+      
+
+await  act("魔法が──発動する。",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("芽が萌え、",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("蔓が絡み、",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("肥大し、",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("幹となり、",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("葉を繁らす。",fenaln,fenali,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("鉄鎖は錆に覆われ、腐食する。",fenaln,fenali,T+1000)
+var T = T+3000
+await  act("人工的な玉座の間が、森に埋もれていく。",fenaln,fenali,T+3000)
+var T = T+3000     
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000     
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("ひとりの人間が、命を対価に発動した最期の魔法。それに気を払うだけの余裕が、今の私にはもう無かった。",fenaln,fenali,T+3000)
+var T = T+3000
+        await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000 
+        await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000 
+file("https://cdn.discordapp.com/attachments/982797122996928602/997020717822521434/253_20220714150415.png",T+1000)
+      var T=T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000 //Very Fast
+         await  act("_ _\n_ _",nullN,nullI,T+800)
+var T = T+800
+         await  act("_ _\n_ _",nullN,nullI,T+700)
+var T = T+700
+         await  act("_ _\n_ _",nullN,nullI,T+500)
+var T = T+500
+         await  act("_ _\n_ _",nullN,nullI,T+400)
+var T = T+400
+         await  act("_ _\n_ _",nullN,nullI,T+300)
+var T = T+300
+await  act("ぅ……ああああああっ！",fenN,fenI,T+3000)
+var T = T+3000
+await  act("、",fenN,fenI,T+5000)
+var T = T+5000
+await  act("…",fenN,fenI,T+3000)
+var T = T+3000
+await  act("……",fenN,fenI,T+2000)
+var T = T+2000
+await  act("……",fenN,fenI,T+2000)
+var T = T+2000
+await  act("当初の目的を忘れ、理念を忘れ、理由を失い。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("ただ、憎悪に任せて──",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("──オーディンを殺した。",fenaln,fenali,T+4000)
+var T = T+4000
+bookmark(T+4000)
+
+
+actInChat("《君たちは、この世界に介入をしない道を選んだ》",bugN,bugI,T+5000)
+      var T=T+5000
+      actInChat("《それは果たして、正しかったのかな？》",bugN,bugI,T+2000)
+      actInChat("《もしかしたら、他の道もあったのかもしれない。これが──こんな結末が、それでもやっぱり最善だったのか、それも今となっては分からない》",bugN,bugI,T+2500)
+actInChat("《さあ、君たちはどんな未来を見せてくれるのかな？》",bugN,bugI,T+4000)
+
+ await setTimeout(() => {
+      message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 14\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+    };
+
+
+
+
+
+//死亡
+ if (splitmessage[1] === "9") {
+    var  T=0
+      message.channel.send("進行9");     
+      await  act("_ _\n_ _",nullN,nullI,3000)
+ file("https://cdn.discordapp.com/attachments/982797122996928602/997019473804525670/unknown.png",T+3000)
+   var T=T+3000
+await  act("──世界を滅ぼす、か。",ordN,ordI,T+3000)
+var T = T+3000
+
+await  act("_ _\n玉座にもたれて、隻眼の少年は詠う。",fenaln,fenali,T+2000)
+var T = T+2000
+
+await  act("_ _\nそれは君自身の選択かい？",ordN,ordI,T+3000)
+var T = T+3000
+await  act("だとすればどうして？",ordN,ordI,T+4000)
+var T = T+4000
+await  act("自らを疎んじた世界への復讐？",ordN,ordI,T+1500)
+var T = T+1500
+await  act("それとも、「自分ならより良く世界を運営できる」なんていう驕りかな？",ordN,ordI,T+1500)
+var T = T+1500
+await  act("ただの破壊衝動？意趣返し？",ordN,ordI,T+1000)
+var T = T+1000
+
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("……",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("それとも──それさえも、君はわかっていないのかな？",ordN,ordI,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("……私は、空っぽですから。",fenN,fenI,T+6000)
+var T = T+6000
+await  act("_ _\nそうかい。",ordN,ordI,T+3000)
+var T = T+3000
+await  act("──それにしては、ずいぶんと沢山の人間に見守られているようだけどね？",ordN,ordI,T+2000)
+var T = T+2000
+
+await  act("見守られている……？何の話です？",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("_ _\n君の未来の……或いは過去の。時空の彼方のお話さ。",ordN,ordI,T+3000)
+var T = T+3000
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("時空の……？それってどういう──",fenN,fenI,T+5000)
+var T = T+5000
+
+await  act("_ _\n_ _",ordN,ordI,T+500)
+var T = T+500
+await  act("──ダラダラと話をしても、観̀客̀にはつまらないだろうし……っと。",ordN,ordI,T+1500)
+var T = T+1500
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+700
+
+await  act("さっさと、決着をつけようか。",ordN,ordI,T+3000)
+var T = T+3000
+
+bookmark(T+4000)
+actInChat("《──ねぇ。君たちは、本当に世界を滅ぼすのかい？》",bugN,bugI,T+4500)
+   act("《──ねぇ。君たちは、本当に世界を滅ぼすのかい？》\n<#970635600954793994>",bugN,bugI,T+4500)
+ await setTimeout(() => {
+      message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 10\n!once 12\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+ }
+
+
+
+//Yes
+    
+     if (splitmessage[1] === "10") {
+    var  T=0
+      message.channel.send("進行10");     
+     file("https://media.discordapp.net/attachments/982797122996928602/997020717822521434/253_20220714150415.png",T+3000)
+       var T=T+3000
+       await  act("_ _\n_ _",nullN,nullI,T+3000)
+var T=T+3000
+await  act("──か……はっ\n_ _",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("胸を貫く衝撃に首を下げる。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("視界に映る控えめな胸からは、どこか不自然に棒が生えていた。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("大きさに憧れたことが無かったとは言わないが、棒が生えるなんてこんな形での成長は望んでいるはずもない。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("_ _\n_ _",nullN,nullI,1000)
+       var T = T+1000
+await  act("というか胸と棒を連呼するのはいけない気がする。何がとは言わないけれど。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("ちょっと、うん。……やめて？",fenaln,fenali,T+2000)
+var T = T+2000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+     await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("つまるところ、敗北であって。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("──空回りする思考を他所に、視界は黒に染まっていって。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("意識も、だんだんと他人行儀に遠ざかっていく。",fenaln,fenali,T+3000)
+var T = T+3000
+
+bookmark(T+3000)
+       var T = T+3000
+       
+            await  act("_ _\n_ _",nullN,nullI,T+20000)
+var T = T+20000
+
+await  act("……うん？",ordN,ordI,T+3000)
+var T = T+3000
+
+await  act("ふぇんりるの心臓に突き刺した槍が、もう一度泥に埋もれるような感触を伝える。",nullN,nullI,T+3000)
+       var T = T+3000
+await  act("それはまるで、何か得体の知れないモノが彼女の胸の穴を塞ごうとしているかのような──",nullN,nullI,T+3000)
+       var T = T+3000
+await act("_ _\n_ _",nullN,nullI,T+1000)
+       var T = T+1000
+await  act("──っ！？",ordN,ordI,T+3000)
+var T = T+3000
+
+await  act("力を失ってだらりと垂れていたふぇんりるの腕が、ぴくりと動く。",nullN,nullI,T+3000)
+       var T = T+3000
+await  act("次の瞬間には、その腕がオーディンの握る槍を掴んでいた。",nullN,nullI,T+1000)
+       var T = T+1000
+await  act("濃密な黒い靄がその腕を覆い──",nullN,nullI,T+3000)
+       var T = T+3000
+await  act("──掴まれた槍の半分が、持ち手を残して消滅した。",nullN,nullI,T+1500)
+       var T = T+1500
+await  act("心臓に空いた、どうしようもなく大きな穴は、渦巻く闇が即座に埋める。",nullN,nullI,T+2000)
+       var T = T+2000
+await act("_ _\n_ _",nullN,nullI,T+1000)
+       var T = T+1000
+await  act("……日輪を喰らう狼──忌み子の、お出ましか",ordN,ordI,T+3000)
+var T = T+3000
+file("https://media.discordapp.net/attachments/982797122996928602/997022971669532723/22896300.jpg?width=1370&height=1028",T+5000)
+       var T =T+5000
+await act("_ _\n_ _",nullN,nullI,T+4000)
+       var T = T+4000
+       await act("_ _\n_ _",nullN,nullI,T+500)
+       var T = T+500
+       
+bookmark(T+500)
+        await setTimeout(() => {
+      message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 11\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+     }
+
+
+
+
+  if (splitmessage[1] === "11") {
+    var  T=0
+      message.channel.send("進行11");     
+      await  act("_ _\n_ _",nullN,nullI,3000)
+
+await  act("──夢を見ていた。",fenN,fenI,T+5000)
+var T = T+5000
+await  act("渇きがあった。飢えがあった。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("それ以外には、何も無かった。",fenN,fenI,T+3000)
+var T = T+3000
+
+await act("_ _\n_ _",nullN,nullI,T+3000)
+       var T = T+3000
+await  act("_ _\n飢えに溺れ",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("渇きに悶え",fenN,fenI,T+1000)
+var T = T+1000
+await  act("渇欲に身を焦がし",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("失望に自食し",fenN,fenI,T+900)
+var T = T+900
+await  act("喰い齧ることで削ぎ剥がれて",fenaln,fenali,T+900)
+var T = T+900
+await  act("それでも飽食が訪れることは無い。",fenN,fenI,T+2000)
+var T = T+2000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await act("_ _\n_ _",nullN,nullI,T+1000)
+       var T = T+1000
+await  act("いつしか視界は高く地面を見渡していて。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("この渇望を満たすものは眼下には見当たらない。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("──ならば。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("視界を上に。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("日輪は未だ輝いている──",fenN,fenI,T+1500)
+var T = T+1500
+
+await act("_ _\n_ _",nullN,nullI,T+1000)
+       var T = T+1000
+       await act("_ _\n_ _",nullN,nullI,T+1000)
+       var T = T+1000
+       await act("_ _\n_ _",nullN,nullI,T+700)
+       var T = T+700
+       await act("_ _\n_ _",nullN,nullI,T+500)
+       var T = T+500
+     await act("_ _\n_ _",nullN,nullI,T+300)
+       var T = T+300   
+       await act("_ _\n_ _",nullN,nullI,T+300)
+       var T = T+300
+await  act("──させると、思う？",ordN,ordI,T+700)
+var T = T+700
+
+await  act("……？",fenN,fenI,T+3000)
+var T = T+3000
+await  act("右の腕を失い、蒼白な顔に凄絶な笑みを浮かべて。",nullN,nullI,T+3000)
+var T = T+3000
+await  act("そのヒトガタは、科白を述べる。",nullN,nullI,T+3000)
+var T = T+3000
+
+await  act("_ _\nボクは王であって、別に神̀じ̀ゃ̀あ̀な̀い̀。",ordN,ordI,T+4000)
+var T = T+4000
+await  act("国民がいなくちゃ、王権は成り立たないからね。",ordN,ordI,T+2000)
+var T = T+2000
+await  act("──ボクはボクなりに、国民のことを想ってはいるんだぜ？",ordN,ordI,T+3000)
+var T = T+3000
+   await act("_ _\n_ _",nullN,nullI,T+10000)
+       var T = T+10000
+bookmark(T+1000)
+   await act("_ _\n_ _",nullN,nullI,T+1000)
+
+       var T = T+1000
+          await act("_ _\n_ _",nullN,nullI,T+1000)
+       var T = T+1000
+          await act("_ _\n_ _",nullN,nullI,T+1000)
+       var T = T+1000
+
+act("キミ達は、ふぇんりるを応援しようとお節介にも手を出し続けた。",bugN,bugI,T+5000)
+    var T=T+5000
+       await act("_ _\n_ _",nullN,nullI,T+1000)
+       var T = T+1000
+act("ふぇんりるが正義で、オーディンが悪だと思ったのかな。",bugN,bugI,T+2000)
+    var T=T+2000
+       await act("_ _\n_ _",nullN,nullI,T+1000)
+       var T = T+1000
+act("──それはひどく、傲慢なことだね。",bugN,bugI,T+3000)
+    var T=T+3000
+    
+ 
+       file("https://media.discordapp.net/attachments/982797122996928602/997476619352559726/256_20220715195650.png",T+8000)
+       var T=T+8000
+       
+       file("https://media.discordapp.net/attachments/982797122996928602/997715468943118336/238_20220716130456.png",T+15000)
+       act("物語は、終わらない──",bugN,bugI,T+14000)
+    }
+
+
+
+
+
+//No(敗北)
+      if (splitmessage[1] === "12") {
+    var  T=0
+      message.channel.send("進行12");     
+      await  act("_ _\n_ _",nullN,nullI,3000)
+await  act("──ああ、まずい。まずい。これは……負けるな……？",ordN,ordI,T+3000)
+var T = T+3000
+
+await  act("オーディンの溢した呟きに、首を捻る。どう見たって、劣勢なのは私の方だ。",fenaln,fenali,T+4000)
+var T = T+4000
+
+await  act("あなたの言うことは……本当に分かりづらすぎます。直した方がいいんじゃないですか？そういう癖。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("「私が」負けるって言いたいんですか？それはそれで腹が立ちますけど。",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("分かりづらいも何も、そのままの意味さ。ボクが負けそうなんだよ。実際。",ordN,ordI,T+3000)
+var T = T+3000
+await  act("こう見えて頭脳派なんだよ、ボクは？危機察知はお手のものさ。",ordN,ordI,T+3000)
+var T = T+3000
+
+await  act("何か大切なことを知っているのに、話さない。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("話さないのに、隠しはしない。",fenaln,fenali,T+2000)
+var T = T+2000
+await  act("相手に理解させる気のない喋り口。",fenaln,fenali,T+2000)
+var T = T+2000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("理解できないことを理解しようとして、思考に生じた刹那の空隙。",fenaln,fenali,T+3000)
+var T = T+3000
+
+await  act("──っ！？",fenN,fenI,T+3000)
+var T = T+3000
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+
+await  act("芽が萌え、",fenaln,fenali,T+1500)
+var T = T+1500
+await  act("蔓が絡み、",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("肥大し、",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("幹となり、",fenaln,fenali,T+1000)
+var T = T+1000
+await  act("葉を繁らす。",fenaln,fenali,T+1000)
+var T = T+2000
+await  act("_ _\n意識の隙間を突くように発動された拘束魔術は、しかし私ではなくオーディンに牙を剥いた。",fenaln,fenali,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("幹に半身を埋がらも、オーディンは飄々と話し続ける。",fenaln,fenali,T+3000)
+var T = T+3000
+
+await  act("あの拘束、君は自分で解いたんだろう？",fenaln,fenali,T+3000)
+var T = T+3000
+
+await  act("……ええ。",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("そう、それが問題なのさ。",ordN,ordI,T+2000)
+var T = T+2000
+await  act("おかしいとは思わなかったのかい？仮にも魔法の紐だよ？”拘束”の効果を概念ごと強化した特別製。",ordN,ordI,T+3000)
+var T = T+3000
+await  act("いくら君でも、破れるはずがないんだ。本̀来̀な̀ら̀ね。",ordN,ordI,T+3000)
+var T = T+3000
+
+await  act("紐に込められた魔力を、別の魔術に流用した。",ordN,ordI,T+3000)
+var T = T+3000
+await  act("その細工をしたのは──十中八九、テュールだろうね。",ordN,ordI,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("テュール、が……",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("おっと、勘違いしない方がいい。テュールはボクと多少の因縁があるからね。なにも君のため、ってわけじゃないさ。",ordN,ordI,T+3000)
+var T = T+3000
+await  act("むしろ君は、利用されただけの憐れな小犬だ。",ordN,ordI,T+3000)
+var T = T+3000 
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000  
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+
+await  act("──彼が死んだのも、自業自得ってことだよ。",ordN,ordI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("……",fenN,fenI,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+
+await  act("……そう言われると、結構頭にきますね。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("……",fenN,fenI,T+2000)
+var T = T+2000
+
+await  act("……テュールが死に際、なんて言ったか知ってます？",fenN,fenI,T+3000)
+var T = T+3000
+await  act("『憎̀ん̀で̀も̀構̀わ̀な̀い̀』って言ったんですよ、あの人？",fenN,fenI,T+3000)
+var T = T+3000
+await  act("……",fenN,fenI,T+3000)
+var T = T+3000
+await  act("本当に構わないなら口に出したりしない……というか、多分考えもしない人ですよ、テュール。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("……悪役になりきれてないどころか、未練たらたらじゃないですかこの世に。",fenN,fenI,T+2000)
+var T = T+2000
+await  act("ほんと……",fenN,fenI,T+2000)
+var T = T+2000
+await  act("インテリぶってる癖に不器用で笑えちゃいます。",fenN,fenI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("……ふぅん？",ordN,ordI,T+3000)
+var T = T+3000
+await  act("──要領を得ないね。結局、何が言いたいんだい？君だってテュールの悪口しか言っていないじゃないか。",ordN,ordI,T+2000)
+var T = T+2000
+
+await  act("わざと煽るような口調。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("実際、一応の理解はできているのだろう。ただ納得をしていない。するつもりがない。",fenaln,fenali,T+3000)
+var T = T+3000      
+await  act("_ _\n_ _",nullN,nullI,T+2000)
+var T = T+2000
+
+await  act("だから、本当の意味で”理解”していない。",fenaln,fenali,T+500)
+var T = T+500   
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000     
+await  act("_ _\n_ _",nullN,nullI,T+400)
+var T = T+400
+
+
+await  act("頭にきます……。",fenN,fenI,T+800)
+var T = T+800
+
+await  act("──そんなことも理解できない輩が、テュールを語るな……！",fenN,fenI,T+3000)
+var T = T+3000
+
+await  act("一歩。刃を構えて、一段と強く踏み込む。",fenaln,fenali,T+3000)
+var T = T+3000
+
+await  act("_ _\nオーディンの口元が歪む。\n_ _",nullN,nullI,T+2000)
+        var T=T+2000
+
+await  act("_ _\n二歩。木の葉が頬を掠める。",fenaln,fenali,T+2000)
+var T = T+200
+         await  act("_ _\n_ _",nullN,nullI,T+500)
+var T = T+500     
+await  act("_ _\n_ _",nullN,nullI,T+450)
+var T = T+450
+
+await  act("流石、彼の娘だ。そうだね、仕方ない──ボクの負けだ。",ordN,ordI,T+2000)
+var T = T+2000
+await  act("遠慮なく、刺すといいさ──",ordN,ordI,T+1500)
+var T = T+1500
+await  act("_ _\n──我̀が̀息̀子̀よ̀。",ordN,ordI,T+3500)
+var T = T+3500
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("ぐっ……か、は──",fenN,fenI,T+800)
+var T = T+800
+
+
+await  act("_ _\n衝撃。視界が黒に蝕まれていく。",fenaln,fenali,T+3000)
+var T = T+3000
+await  act("失われていく視界には、自らの胸を貫いた槍の穂先が映っていて。",fenaln,fenali,T+2500)
+var T = T+2500
+
+await  act("_ _\n_ _\n──三歩目は、ついぞ踏み出されなかった。",fenaln,fenali,T+3000)
+var T = T+3000
+bookmark(T+8000)
+         await setTimeout(() => {
+      message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 13\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+}
+
+
+
+
+
+
+
+
+//エピローグ
+     if (splitmessage[1] === "13") {
+    var  T=0
+      message.channel.send("進行13");     
+      await  act("_ _\n_ _",nullN,nullI,3000)
+await  act("コーディングエラーの検出……無し。",phxN,phxI,T+5000)
+       var T = T+5000
+await  act("ベース用補助AI…待機状態。",phxN,phxI,T+2500)
+       var T = T+2500
+await  act("通信ルート開通用のソフトウェアも、相手方がよほどの異常世界でない限りは大丈夫…なはず。",phxN,phxI,T+3000)
+       var T = T+3000
+await  act("そんでもって肝心の異次元適応パッチも不備は無し……であることを祈ろうかね……もうね、これ以上は無理だからね。過労死100回の大記録樹立したら精神の方が死にかねないし。",phxN,phxI,T+2500)
+       var T = T+2500
+await  act("んじゃ、そろそろ始めようか。作者の登場も、ちょっとイタいからね。巻きでいこう。",phxN,phxI,T+3500)
+       var T = T+3500
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("次元横断型電脳形成及び符号化…なんだっけ──もとい、通称〖召喚〗プログラム、実行開始っ！",phxN,phxI,T+2000)
+       var T = T+2000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("node v16.14.2, npm 7.20.6",nullN,nullI,T+2000)
+       var T = T+2000
+await  act("11:18 PM\nInstalling...",nullN,nullI,T+700)
+var T = T+700
+  
+await  act("11:18 PM\nnpm WARN EBADENGINE\nUnsupported engine {",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\nnpm WARN EBADENGINE  \npackage: '@sapphireawait  act(\"sync-queue\n1.1.5',",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\nnpm WARN EBADENGINE   required: { node: '>=v14.18.0', npm: '>=7.24.1' },",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\nnpm WARN EBADENGINE   current: { node: 'v16.14.2', npm: '7.20.6' }",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\nnpm WARN EBADENGINE }",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\n_ _",nullN,nullI,T+700)
+var T = T+700
+
+await  act("11:18 PM\nup to date, audited 117 packages in 3s",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\n_ _",nullN,nullI,T+700)
+var T = T+700
+
+await  act("11:18 PM\n17 packages are looking for funding",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\n  run `npm fund` for details",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\n_ _",nullN,nullI,T+700)
+var T = T+700
+
+await  act("_ _\n11:18 PM\n3 vulnerabilities (2 high, 1 critical)",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\n_ _",nullN,nullI,T+700)
+var T = T+700
+
+await  act("11:18 PM\nTo address all issues, run:",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\n  npm audit fix",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\n_ _",nullN,nullI,T+700)
+var T = T+700
+
+await  act("11:18 PM\nRun `npm audit` for details.",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\nTotal install time: 5377ms",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\n_ _",nullN,nullI,T+700)
+var T = T+700
+await  act("a few seconds ago\n(node:735)\nMaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 messageCreate listeners added to [Client]. Use emitter.setMaxListeners() to increase limit",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\n(Use `node --trace-warnings ...` to show where the warning was created)",nullN,nullI,T+700)
+var T = T+700
+
+await  act("_ _\nLog:システム準備完了！\n_ _",nullN,nullI,T+1200)
+var T = T+1200
+         await  act("_ _\n_ _",nullN,nullI,T+1500)
+var T = T+1500
+         await  act("_ _\n_ _",nullN,nullI,T+700)
+var T = T+700
+await  act("よし……これで──",nullN,nullI,T+700)
+var T = T+700
+await  act("11:18 PM\nLog:DimensionalTransmissionProcess(1/4)",nullN,nullI,T+2000)
+var T = T+2000
+await  act("11:18 PM\nLog:DimensionalTransmissionProcess(2/4)",nullN,nullI,T+1200)
+var T = T+1200
+await  act("11:18 PM\nLog:DimensionalTransmissionProcess(3/4)",nullN,nullI,T+700)
+var T = T+700
+await  act("11:19 PM\nError:DimensionalTransmissionProcess4 failed",nullN,nullI,T+700)
+var T = T+700
+await  act("11:19 PM\n(ErrorCode:001)EmergencyWarning:SuperNova",nullN,nullI,T+700)
+var T = T+700
+await  act("11:19 PM\n(ErrorCode:012)Warning:TransmissionLineCrossed",nullN,nullI,T+700)
+var T = T+700
+await  act("11:19 PM\nProcess:ForcedTermination",nullN,nullI,T+700)
+var T = T+700
+await  act("11:19 PM\nSegregateAllDataInProgress Complete",nullN,nullI,T+700)
+var T = T+700
+await  act("_ _\n11:19 PM\nForcedTermination Complete",nullN,nullI,T+1200)
+var T = T+1200
+
+
+
+await  actInChat("_ _\n",nullN,nullI,T+10000)
+var T = T+10000
+
+actInChat("──ぁ……れ……？",fenN,fenI,T+3000)
+       var T=T+3000
+actInChat("──ここ…は……？",fenN,fenI,T+3000)
+       var T=T+3000
+actInChat("──せーのっ",phxN,phxI,T+8000)
+       var T=T+8000
+
+
+//新ようこそスタンプ(タイトルコール)
+bookmark(T+15000)
+       var T=T+15000
+       file("https://media.discordapp.net/attachments/982797122996928602/997476619872641064/256_20220715211325.png",T+1000)
+       var T=T+1000
+       
+       file("https://media.discordapp.net/attachments/982797122996928602/997715468943118336/238_20220716130456.png",T+15000)
+       act("物語は、終わらない──",bugN,bugI,T+1400)
+}
+       
+
+      
+      
+
+//テュール生存(死亡)ルート
+//（文字化け）
+    
+     if (splitmessage[1] === "14") {
+    var  T=0
+      message.channel.send("進行14");     
+      await  act("_ _\n_ _",nullN,nullI,3000)
+await  act("復讐の後には、何も残らなかった。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("_ _\n王を失った世界を維持するだけの余力は、私には無くて。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("_ _\n崩壊していく世界を、ただひたすらに歩き回った。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("_ _\n破綻していく世界を嘆く人がいた。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("_ _\n何も知らずに今を謳歌する家族があった。",fenN,fenI,T+3000)
+var T = T+3000
+await  act("_ _\n今を生きるのに精一杯な子供がいた。",fenN,fenI,T+3000)
+var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("──その旅の果てに。",fenN,fenI,T+3000)
+var T = T+3000
+
+
+await  act("`この世界のことは、私が請け負うよ。──なんたって私は崩壊と、そして再生の象徴なんだからね。まぁどうにかするさ。`",phxN,phxI,T+2000)
+       var T = T+8000
+
+await  act("`ただまぁ……その、”王権”をね？渡してもらわないといけないから……`",phxN,phxI,T+2000)
+       var T = T+5000
+
+await  act("`……。`",phxN,phxI,T+2000)
+       var T = T+3000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("`……君は、この世界には居られなくなる。`",phxN,phxI,T+2000)
+       var T = T+3000
+           
+  
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+
+await  act("──家族も居なければ、これといった友人も居ない──自らが滅ぼしたこの世界を、私は。",fenN,fenI,T+3000)
+var T = T+5000
+      await setTimeout(() => {
+      message.channel.send(
+            "<:z_line:920665438306828319><:z_line:920665438306828319>\n!once 15\n<:z_line:920665438306828319><:z_line:920665438306828319>"
+          );
+        }, T);
+}
+      
+//（ライブ会話）
+    
+     if (splitmessage[1] === "15") {
+    var  T=0
+      message.channel.send("進行15");     
+      await  act("_ _\n_ _",nullN,nullI,T+3000)
+var T=T+3000
+await  act("──こんな日常が、あの世界にもあるのなら。",fenN,fenI,T+6000)
+var T =  T+6000
+
+await  act("──それは多分、何よりも尊いことなのだと、そう思うから。",fenN,fenI,T+6000)
+var T = T+6000
+         await  act("_ _\n_ _",nullN,nullI,T+1000)
+var T = T+1000
+await  act("https://media.discordapp.net/attachments/982797122996928602/997727845625372752/247.png",fenN,fenI,T+7000)
+var T = T+7000
+bookmark(T+15000)
+       var T=T+15000
+       file("https://media.discordapp.net/attachments/982797122996928602/997476619616784414/256_20220715201200.png",T+1000)
+       var T=T+1000
+       
+       file("https://media.discordapp.net/attachments/982797122996928602/997715468943118336/238_20220716130456.png",T+15000)
+       act("物語は、終わらない──",bugN,bugI,T+14000)
+}
+
+    }
+
+
+
+  }
+});
+
+/*/
+ client.on("messageCreate", message => sendMessageWebhook(message,"‡ 　҈͉̦̠̠̱̱͕̱̙͓̘͕́̔̔̄̃̀̀̄　̷̱̦̮̜̣͓̬͔͙͇̙̊͑̀͒̿̀̽̚ͅ　̸͕̱͉̝̲̠͔̞̲̱͒̍̈́̀̓　̷̳̦͚̩̯̲̝̦̟͇͈͒͌̔͋̈́̀̑̉　҉̳̖̪̠̂̈́̊͐̄̎　 ‡","https://cdn.glitch.global/f07fb903-52cb-4077-b26c-f478bb1a6af1/fallen-icon.png?v=1651489749473").catch(err => console.error(err)));
+ client.login(process.env.DISCORD_BOT_TOKEN).catch(err => {
+   console.error(err);
+   process.exit(-1);
+ });
+/*/
+
+/*/
+
+↑1周年シナリオ↑
+
+/*/
